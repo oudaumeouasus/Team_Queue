@@ -6,6 +6,23 @@ Queue::Queue()
 	head = NULL;
 	tail = NULL;
 }
+#Функция инвертирования
+void Queue::inversion()
+{
+    Man* prev_ptr = nullptr;
+    Man* current_ptr = this->get_head();
+    Man* next_ptr = nullptr;
+
+    while(current_ptr != nullptr)
+    {
+        next_ptr = current_ptr->get_next();
+        current_ptr->set_next(prev_ptr);
+        prev_ptr = current_ptr;
+        current_ptr = next_ptr;
+    }
+
+    this->set_head(prev_ptr);
+}
 
 void Queue::set_count(int new_count)
 {
