@@ -103,7 +103,7 @@ void Queue::del_index(int index)
         Man* toDel = previous->get_next();
         previous->set_next(toDel->get_next());
 
-        
+
         if (index == count-1)
         {
             Man* new_tail = this->head;
@@ -129,7 +129,7 @@ void Queue::del_znach(float znach)
     {
         if (temp->get_value() == znach)
         {
-            cout << endl<<temp->get_value()<<endl;
+            cout << "Удалено" <<temp->get_value()<<endl;
             temp = temp->get_next();
             this->del_index(i - delcount);
             delcount++;
@@ -139,7 +139,7 @@ void Queue::del_znach(float znach)
         {
             temp = temp->get_next();
         }
-        
+
     }
 }
 
@@ -154,19 +154,17 @@ float Queue::del_info(float znach)
             proverka++;
         }
         temp = temp->get_next();
-            
+
     }
-    cout << endl<<proverka<<endl;
+    //cout << endl<<proverka<<endl;
     if (proverka > 0)
     {
         del_znach(znach);
-        cout << "Удалено ";
         return znach;
     }
     else
     {
-        cout << "Такого элемента нет";
-        return NULL;
+        return 0;
     }
 }
 
@@ -206,7 +204,7 @@ Queue::~Queue()
     del_all();
 }
 
-float &Queue::operator[](const int index)
+float& Queue::operator[](const int index)
 {
     Man* current = this->head;
     int counter = 0;
@@ -215,12 +213,18 @@ float &Queue::operator[](const int index)
     {
         if (counter == index)
         {
-            float b = current->get_value();
-            return b;
+            float* b = new float(current->get_value());
+            float& result = *b;
+            delete b;
+
+            return result;
         }
         current = current->get_next();
         counter++;
     }
+    // В случае, если индекс не найден, можно вернуть ссылку на статическую переменную или бросить исключение
+    static float error_value = 0.0f;
+    return error_value;
 }
 
 void Queue::print()
@@ -242,15 +246,56 @@ void Queue::print()
 
 std::ostream& operator<<(std::ostream& output, Queue& q)
 {
-    Man* temp = q.head;
-    for (int i = 0; i < q.count; i++)
+    if (q.isEmpty())
     {
-        cout << temp->get_value() << "->";
-        temp = temp->get_next();
+        cout << "очередь пуста ";
+        return output;
     }
-    cout << "NULL"<<endl;
-    return output;
+    else 
+    {
+        Man* temp = q.head;
+        for (int i = 0; i < q.count; i++)
+        {
+            cout << temp->get_value() << "->";
+            temp = temp->get_next();
+        }
+        cout << "NULL" << endl;
+        return output;
+    }
 }
+void Queue::del_copy()
+{
+    Man* current_ptr = this->get_head();
+
+    while (current_ptr != nullptr)
+    {
+        float current_value = current_ptr->get_value();
+        Man* temp_ptr = current_ptr->get_next();
+        Man* prev_ptr = current_ptr;
+        cout<< current_value << endl;
+        cout<< prev_ptr->get_value() << endl;
+        cout<< temp_ptr->get_value() << endl;
+        while (temp_ptr != nullptr)
+        {
+            if (temp_ptr->get_value() == current_value)
+            {
+                Man* duplicate_node = temp_ptr;
+                temp_ptr = temp_ptr->get_next();
+                prev_ptr->set_next(temp_ptr);
+                cout << "Съебавшись" <<(duplicate_node->get_value()) << endl;
+                delete duplicate_node;
+            }
+            else
+            {
+                prev_ptr = temp_ptr;
+                temp_ptr = temp_ptr->get_next();
+            }
+        }
+
+        current_ptr = current_ptr->get_next();
+    }
+}
+
 
 void Queue::inversion()
 {
