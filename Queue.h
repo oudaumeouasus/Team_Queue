@@ -3,20 +3,20 @@
 using namespace std;
 #pragma once
 class Queue {
-  friend std::ostream& operator<<(std::ostream& output, Queue& q);
+  friend std::ostream& operator<<(std::ostream& output, Queue& q);//перегрузка вывода
 
 private:
-  Man* head;
-  Man* tail;
-  int count;
+  Man* head;//голова
+  Man* tail;//хвост
+  int count;//количество в очереди
 public:
-  void set_count(int new_count);
-  void set_head(Man *new_head);
-  void set_tail(Man *new_tail);
+  void set_count(int new_count);//изменение количества
+  void set_head(Man *new_head);//изменение головы
+  void set_tail(Man *new_tail);//изменение хвоста
 
-  int get_count() const;
-  Man* get_head() const;
-  Man* get_tail() const;
+  int get_count() const;//получение значения количества
+  Man* get_head() const;//получение значения головы
+  Man* get_tail() const;//получение значения хвоста
 
   void add_con(float value);//добавление в конец
   void add_nach(float value);//добавление в начало
@@ -29,12 +29,13 @@ public:
   void tek_znach();//узнать текущее значение 
   void inversion();//инвертирование
   void del_copy();//удаление дубликатов
+  Queue& operator=(const Queue& right);//перегрузка приравнивания
+  bool isEmpty() const;//проверка на пустоту
+  Queue();//конструктор без параметров
+  Queue(int count);//конструктор с параметром количества
+  Queue(const Queue& init);//конструктор копии
+  ~Queue();//деструктор
+  void print();//функция вывода
 
-  bool isEmpty() const;
-  Queue();
-  Queue(int count);
-  ~Queue();
-  void print();
-
-  float& operator[](const int index);
+  float& operator[](const int index);//перегрузка индексации
 };
