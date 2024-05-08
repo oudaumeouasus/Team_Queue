@@ -8,6 +8,27 @@ Queue::Queue()
     tail = NULL;
 }
 
+Queue::Queue(const Queue& init)//конструктор копии
+{
+    Man* temp = init.head;//в temp присваиваем голову init
+    while(temp!=NULL)//идём по всей очереди(из которой копируем), пока не доходи до конца (temp!=NULL)
+    {
+        add_con(temp->get_value());//в очередь, с которой работаем добавляем в конец значение из текущего элемента(temp)
+        temp = temp->get_next();//переходим к следующему элементу очереди из которой копируем
+    }
+}
+
+Queue& Queue::operator=(const Queue& right)
+{
+    del_all();//удаляем всё из очереди с которой работаем
+    Man* temp = right.get_head();//присваиваем в temp голову из очереди right(мы из неё копируем)
+    for(int i=0; i<right.get_count(); i++)//идём по всему количеству элементов 
+    {
+        add_con(temp->get_value());//в очередь, с которой работаем добавляем в конец значение из текущего элемента(temp)
+        temp = temp->get_next();////переходим к следующему элементу очереди из которой копируем
+    }
+    return *this;//возвращаем заполненную очередь
+}
 
 void Queue::set_count(int new_count)
 {
@@ -39,42 +60,40 @@ Man* Queue::get_tail() const
     return tail;
 }
 
-void Queue::add_con(float value)
+void Queue::add_con(float value)//добавление в конец значение, которое передали
 {
-    Man* new_man = new Man(value);
-    if (get_head() == NULL)
+    Man* new_man = new Man(value);//создаем новый элемент очереди с переданным значением(в next присваивается NULL) 
+    if (get_head() == NULL)//если очередь, с которой работаем пуста
     {
-        set_head(new_man);
-        tail = head;
+        set_head(new_man);//делаем новый элемент головой
     }
     else
     {
-        get_tail()->set_next(new_man);
-        tail = new_man;
+        get_tail()->set_next(new_man);//у последнего элемента меняем NULL на новый элемент
     }
-    set_tail(new_man);
-    count++;
+    set_tail(new_man);//теперь новый элемент - хвост
+    count++;//количество элементов увеличилось на 1
 }
 
-void Queue::add_nach(float value)
+void Queue::add_nach(float value)//добавление в начало
 {
-    head = new Man(value, head);
-    count++;
+    head = new Man(value, head);//голове присваиваем новый элемент, который создается с параметрами(новое значение и следующий элемент голова очереди, с которой работаем)
+    count++;//количество увеличивается на 1
 }
 
-void Queue::del_head()
+void Queue::del_head()//удаление головы
 {
-    Man* temp = head;
-    head = head->get_next();
-    delete temp;
-    count--;
+    Man* temp = head;//указатель temp указывает туда же, куда и голова
+    head = head->get_next();//меняем голову на следующий после головы элемент
+    delete temp;//удаляем значения (то что хранится по указателю temp(head))
+    count--;//уменьшение количества
 }
 
-void Queue::del_all()
+void Queue::del_all()//удаление всего
 {
-    while (count!=0)
+    while (count!=0)//пока количество элементов в очереди с которой работает не равно 0
     {
-        del_head();
+        del_head();//удаляем головы
     }
 }
 
@@ -122,10 +141,9 @@ void Queue::del_index(int index)
 
 void Queue::del_znach(float znach)
 {
-    int a = count;
     Man* temp = this->head;
     int delcount = 0;
-    for (int i = 0; i < a; i++)
+    for (int i = 0; i < count; i++)
     {
         if (temp->get_value() == znach)
         {
@@ -133,7 +151,6 @@ void Queue::del_znach(float znach)
             temp = temp->get_next();
             this->del_index(i - delcount);
             delcount++;
-            a--;
         }
         else
         {
@@ -156,7 +173,7 @@ float Queue::del_info(float znach)
         temp = temp->get_next();
 
     }
-    //cout << endl<<proverka<<endl;
+
     if (proverka > 0)
     {
         del_znach(znach);
@@ -181,14 +198,14 @@ void Queue::change(float old_value, float new_value)
     }
 }
 
-void Queue::tek_znach()
+void Queue::tek_znach()//текущее значение
 {
-    cout << "Размер " << count << " Значение головы " << head->get_value() << " Значенние хвоста " << tail->get_value()<<endl;
+    cout << "Размер " << count << " Значение головы " << head->get_value() << " Значенние хвоста " << tail->get_value()<<endl;//вывод 
 }
 
-bool Queue::isEmpty() const
+bool Queue::isEmpty() const//проверка, пуста ли очередь
 {
-    return (head == NULL);
+    return (head == NULL);//если указатель головы ни на что не ууказывает - очердь пуста
 }
 
 
@@ -198,10 +215,10 @@ Queue::Queue(int count)
     set_count(count);
 }
 
-Queue::~Queue()
+Queue::~Queue()//перегруженный деструктор
 {
-    cout << endl << "del" << endl;
-    del_all();
+    cout << endl << "del" << endl;//вывод del
+    del_all();//очищение всей очереди
 }
 
 float& Queue::operator[](const int index)
@@ -269,12 +286,12 @@ void Queue::del_copy()
 
     while (current_ptr != nullptr)
     {
-        float current_value = current_ptr->get_value();
-        Man* temp_ptr = current_ptr->get_next();
-        Man* prev_ptr = current_ptr;
-        cout<< current_value << endl;
-        cout<< prev_ptr->get_value() << endl;
-        cout<< temp_ptr->get_value() << endl;
+        float current_value = current_ptr->get_value();//текущее значение
+        Man* temp_ptr = current_ptr->get_next();//следующая
+        Man* prev_ptr = current_ptr;//теккущее
+        cout<< current_value << endl;//текущее значение
+        cout<< prev_ptr->get_value() << endl;//текущее значение
+        cout<< temp_ptr->get_value() << endl;//следующее значение
         while (temp_ptr != nullptr)
         {
             if (temp_ptr->get_value() == current_value)
@@ -287,23 +304,22 @@ void Queue::del_copy()
             }
             else
             {
-                prev_ptr = temp_ptr;
                 temp_ptr = temp_ptr->get_next();
             }
         }
-
         current_ptr = current_ptr->get_next();
     }
 }
 
 
-void Queue::inversion()
+void Queue::inversion()//инвертирование
 {
-    Man* prev_ptr = nullptr;
-    Man* current_ptr = this->get_head();
-    Man* next_ptr = nullptr;
+    Man* tmp_tail =  this->get_head();//создаем указатель на голову
+    Man* prev_ptr = NULL;//указатель на предыдущий элемент
+    Man* current_ptr = this->get_head();//создаем указатель на текущий элемент, который равен голове
+    Man* next_ptr = NULL;//указатель на следующий элемент(он равен NULL)
 
-    while (current_ptr != nullptr)
+    while (current_ptr != NULL)//пока текущий не равен NULL, идйм по всей очереди
     {
         next_ptr = current_ptr->get_next();
         current_ptr->set_next(prev_ptr);
@@ -312,4 +328,6 @@ void Queue::inversion()
     }
 
     this->set_head(prev_ptr);
+    this->set_tail(tmp_tail);
+    
 }
