@@ -19,21 +19,28 @@ int main() {
   {
     A.add_con(i + 1);
   }
-  cout << A;
-  cout << endl;
-  A.del_index(2);
+  A.tek_znach();
+  cout << A << endl;
+  //A.del_znach(2);
   A.add_con(8);
   cout << A;
   A.tek_znach();
-  if(A.del_info(4))
-    {}
-  else
-    cout << "Такого элемента нет"<<endl;
-  cout << A;
-  A.tek_znach();
-  A.inversion();
-  cout << A;
-  A.del_copy();
-  cout << A;
+  
+  //if(A.del_info(4))
+  //  {}
+  //else
+  //  cout << "Такого элемента нет"<<endl;
+    
+  //cout << A;
+  //A.tek_znach();
+  
+  Queue B(A);
+  cout << "B" << B;
+  B.tek_znach();
+  cout << B;
+  Queue C=B;
+  A.del_all();
+  C.tek_znach();
+  cout<<C;
   return 0;
 }
